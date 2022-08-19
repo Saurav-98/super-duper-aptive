@@ -19,29 +19,40 @@ const Navbar = () => {
         </LogoContainer>
         <NavMenu className={showMenu ? 'active' : ''}>
           {navLinks.map((link, index) => (
-            <li>
+            <li key={index}>
               <NavLink className={'nav-links'} to={`${link.toLowerCase()}`}>
                 {link}
               </NavLink>
             </li>
           ))}
         </NavMenu>
-        <Hamburger onClick={handleClick}>
-          {showMenu ? (
-            <FaTimes size={28} style={{ color: '#fff' }} />
-          ) : (
-            <FaBars size={28} style={{ color: '#fff' }} />
+
+        <NavBarSmallScreen>
+          <FaBars size={28} className="overlay-on" onClick={handleClick} />
+
+          {showMenu && (
+            <NavBarSmallScreenOverlay className="slide-in-top flex__center">
+              <FaTimes
+                size={28}
+                onClick={handleClick}
+                className="overlay-close"
+              />
+
+              <NavBarLinksSS>
+                {navLinks.map((link, index) => (
+                  <li key={index}>
+                    <NavLink
+                      className={'nav-links'}
+                      to={`${link.toLowerCase()}`}
+                    >
+                      {link}
+                    </NavLink>
+                  </li>
+                ))}
+              </NavBarLinksSS>
+            </NavBarSmallScreenOverlay>
           )}
-        </Hamburger>
-        <MobileMenu className={showMenu ? 'active' : ''}>
-          {navLinks.map((link, index) => (
-            <li>
-              <NavLink className={'nav-links'} to={`${link.toLowerCase()}`}>
-                {link}
-              </NavLink>
-            </li>
-          ))}
-        </MobileMenu>
+        </NavBarSmallScreen>
       </NavbarContainer>
     </HeaderContainer>
   );
@@ -84,6 +95,12 @@ const NavMenu = styled.ul`
 
     .nav-links {
       color: #fff;
+      transition: all 0.3s ease;
+      font-size: 1.2rem;
+
+      &:hover {
+        color: var(--primary);
+      }
     }
   }
 
@@ -92,39 +109,48 @@ const NavMenu = styled.ul`
   }
 `;
 
-const Hamburger = styled.div`
+const NavBarSmallScreen = styled.div`
   display: none;
-  position: absolute;
-  top: 2rem;
-  right: 3rem;
-  cursor: pointer;
-  z-index: 4;
 
   @media screen and (max-width: 960px) {
     display: flex;
   }
 `;
 
-const MobileMenu = styled.ul`
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
+const NavBarSmallScreenOverlay = styled.div`
+  position: fixed;
+  left: 0;
+  top: 0;
   width: 100%;
-  height: 100vh;
-  background-color: var(--darkgrey);
-  z-index: 2;
-  text-align: center;
-  transition: all 0.4s ease;
-  justify-content: center;
-  align-items: center;
-  top: -100%;
+  height: 100%;
+  flex-direction: column;
+  background: var(--darkgrey);
 
+  /* z-index: 5; */
+  transition: all 0.5s ease;
+`;
+
+const NavBarLinksSS = styled.ul`
+  height: 100%;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+
+  margin-top: 30%;
   li {
-    margin: 1.5rem 0;
-    font-size: 24px;
+    margin: 2rem;
+    cursor: pointer;
+
+    font-size: 2rem;
+    text-align: center;
+
     .nav-links {
-      color: var(--lightgrey);
+      color: var(--lightgray2);
+      transition: all 0.3s ease;
+
+      &:hover {
+        color: var(--primary);
+      }
     }
   }
 `;
